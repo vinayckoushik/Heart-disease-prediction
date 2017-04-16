@@ -1,0 +1,325 @@
+(deftemplate age
+   0 120 years
+   ( (young (z 33 38))
+     (mid (pi 8 38))
+     (old (pi 10 50))
+   )
+)
+
+(deftemplate chest-pain
+  1 4
+  ( (typical-angina (1 0)(1 1)(1 0))
+    (atypical-angina (2 0)(2 1)(2 0))
+    (non-angina (3 0)(3 1)(3 0))
+    (asymptomatic-angina (4 0)(4 1)(4 0))
+  )
+)
+
+(deftemplate cholestrol
+   0 1000 mg/dL
+   ( (low (0 1)(197 1)(200 0))
+     (medium (pi 31 219))
+     (high (pi 45 262))
+   )
+)
+
+(deftemplate blood-pressure
+  90 240 mmHg
+  ( (low (90 1)(120 1)(134 0))
+    (medium (pi 13 140))
+    (high (pi 15 157))
+  )
+)
+
+(deftemplate blood-sugar
+ 0 400 mg
+ ( (no (0 1)(100 1)(119 1)(120 0))
+   (yes (0 0)(120 0)(120 1))
+ )
+)
+
+(deftemplate ECG
+  0 2.5 mv
+  ( (normal (0 1)(0.4 0))
+    (abnormal (pi 0.7 1.1))
+    (hypertrophy (0 0)(1.5 0)(1.8 1))
+  )
+)
+
+
+(deftemplate old-peak
+  0 5
+  ( (low (0 1)(1 1)(2 0))
+    (risk (pi 1.4 2.8))
+    (terrible (0 0) (2 0) (3 1))
+  )
+)
+
+(deftemplate heart-rate
+  0 200 
+ ( (low (z 100 140))
+   (medium (pi 40 150))
+   (high (s 140 151))
+ )
+)
+
+(deftemplate thalscan
+ 3 7
+ ( (normal (3 0)(3 1)(3 0))
+   (fixed-defect (6 0)(6 1)(6 0))
+   (reversible-defect (7 0)(7 1)(7 0))
+ )
+)
+
+(deftemplate exercise
+ 0 1
+ ( (yes (1 0)(1 1)(1 0))
+   (no (0 1)(0 0))
+ )
+)
+
+(deftemplate gender
+ 0 1
+ ( (male (1 0)(1 1)(1 0))
+   (female (0 1)(0 0))
+ )
+)
+
+(deftemplate result
+ 0 4
+ ( (healthy (0 1)(1 1)(1 0))
+   (mild (pi 1 1))
+   (moderate (pi 1.5 1.5))
+   (severe (pi 1 3))
+ )
+) 
+
+(deftemplate person
+  (slot name)
+  (slot gender(type FUZZY-VALUE gender))
+  (slot age(type FUZZY-VALUE age))
+  (slot chest-paintype(type FUZZY-VALUE chest-pain))
+  (slot exercise(type FUZZY-VALUE exercise))
+  (slot blood-sugar(type FUZZY-VALUE blood-sugar))
+  (slot blood-pressure(type FUZZY-VALUE blood-pressure))
+  (slot cholestrol(type FUZZY-VALUE cholestrol))
+  (slot ECG(type FUZZY-VALUE ECG))
+  (slot old-peak(type FUZZY-VALUE old-peak))
+  (slot thalscan(type FUZZY-VALUE thalscan))
+  (slot heart-rate(type FUZZY-VALUE heart-rate))
+)
+
+;(deftemplate diagonosis
+;  (slot heart-disease(type FUZZY-VALUE heart-disease))
+;)
+
+(deffacts p1
+(person (name person1)
+	(gender male)
+	(age (20 0)(20 1)(20 0))
+	(ECG normal)
+	(thalscan normal)
+	(exercise no)
+	(chest-paintype non-angina)
+	(blood-pressure low)
+	(blood-sugar no)
+	(cholestrol low)
+	(old-peak low)
+	(heart-rate low))
+)
+
+;(deffacts p2
+;(person (name x)
+;	(gender female)
+;	(age (39 0)(40 1)(41 0))
+;	(ECG abnormal)
+;	(thalscan normal)
+;	(exercise yes)
+;	(chest-paintype non-angina)
+;	(blood-pressure medium)
+;	(blood-sugar no)
+;	(cholestrol medium)
+;	(old-peak low)
+;	(heart-rate medium))
+;)
+
+;(deffacts p3
+;(person (name x)
+;	(gender male)
+;	(age (50 0)(50 1)(50 0))
+;	(ECG abnormal)
+;	(thalscan fixed-defect)
+;	(exercise yes)
+;	(chest-paintype typical-angina)
+;	(blood-pressure high)
+;	(blood-sugar yes)
+;	(cholestrol high)
+;	(old-peak terrible)
+;	(heart-rate medium))
+;)
+
+;(deffacts p4
+;(person (name x)
+;	(gender male)
+;	(age (50 0)(50 1)(50 0))
+;	(ECG hypertrophy)
+;	(thalscan reversible-defect)
+;	(exercise yes)
+;	(chest-paintype atypical-angina)
+;	(blood-pressure high)
+;	(blood-sugar no)
+;	(cholestrol high)
+;	(old-peak terrible)
+;	(heart-rate high))
+;)
+
+;(deffacts p5
+;(person (name x)
+;	(gender male)
+;	(age (39 0)(40 1)(41 0))
+;	(ECG hypertrophy)
+;	(thalscan reversible-defect)
+;	(exercise yes)
+;	(chest-paintype atypical-angina)
+;	(blood-pressure very high)
+;	(blood-sugar yes)
+;	(cholestrol high)
+;	(old-peak risk)
+;	(heart-rate high))
+;)
+
+;(deffacts p6
+;(person (name x)
+;	(gender male)
+;	(age (39 0)(40 1)(41 0))
+;	(ECG hypertrophy)
+;	(thalscan reversible-defect)
+;	(exercise yes)
+;	(chest-paintype atypical-angina)
+;	(blood-pressure very high)
+;	(blood-sugar yes)
+;	(cholestrol high)
+;	(old-peak risk)
+;	(heart-rate high))
+;)
+
+(defrule r1
+(and (person (chest-paintype non-angina))
+     (person (blood-pressure low))
+     (person (cholestrol low))
+     (person (ECG normal))
+     (or (person (heart-rate low))
+         (person (old-peak low))
+         (person (thalscan normal))
+         (person (age young))))
+=>
+(assert  (result healthy))
+)
+
+(defrule r2
+(and (person (blood-pressure medium))
+     (person (cholestrol medium))
+     (person (ECG abnormal))
+     (or (person (gender female))
+         (person (heart-rate medium))
+         (person (old-peak low))
+         (person (age mid))))
+=>
+(assert  (result mild))
+)
+
+(defrule r3
+(and (person (chest-paintype typical-angina))
+     (person (blood-pressure high))
+     (person (cholestrol high))
+     (or (person (blood-sugar yes))
+         (person (ECG abnormal))
+         (person (gender male))
+         (person (exercise yes))
+         (person (old-peak terrible))
+         (person (thalscan fixed-defect))
+         (person (age old))))
+=>
+(assert  (result moderate))
+)
+
+(defrule r4
+(and (person (chest-paintype atypical-angina))
+     (person (blood-pressure high))
+     (person (cholestrol high))
+     (or (person (ECG hypertrophy))
+         (person (heart-rate high))
+         (person (exercise yes))
+         (person (old-peak terrible))
+         (person (thalscan reversible-defect))
+         (person (age old))))
+=>
+(assert  (result severe))
+)
+
+(defrule r5
+(and (person (chest-paintype atypical-angina))
+     (person (blood-pressure very high))
+     (person (cholestrol very high))
+     (person (ECG hypertrophy))
+     (or (person (heart-rate high))
+         (person (exercise yes))
+         (person (old-peak risk))
+         (person (thalscan reversible-defect))
+         (person (age old))))
+=>
+(assert  (result very severe))
+)
+
+(defrule defuzz
+(declare (salience -100))
+?a1<-(person (name ?wh))
+?a2<-(result ?res)
+=>
+(printout t "person : " ?wh crlf "has COG-defuzzified result = " (moment-defuzzify ?res)crlf(get-fs-lv ?res)crlf)
+)
+
+(defrule defuzz2
+(declare (salience -100))
+?a1<-(person (name ?wh))
+?a2<-(result ?res)
+?a3<-(maximum-defuzzify ?res)
+=>
+(printout t "person : " ?wh crlf "has MOM-defuzzified result =" ?a3 crlf  crlf)
+(assert (result (?a3 0)(?a3 1)(?a3 0)))
+)
+
+(defrule final1
+(declare (salience -100))
+(result healthy)
+=>
+(printout t crlf "The person is free from heart disease. Pure hearted (OR)!!" crlf)
+)
+
+(defrule final2
+(declare (salience -100))
+(result mild)
+=>
+(printout t crlf "The person might have a mild heart disease. Do take more tests !! (OR)" crlf)
+) 
+
+(defrule final3
+(declare (salience -100))
+(result moderate)
+=>
+(printout t crlf "The person might have a heart disease. Can be cured easily !!(OR)" crlf)
+)
+
+(defrule final4
+(declare (salience -100))
+(result severe)
+=>
+(printout t crlf "The person might have severe heart disease. Blood flow is not proper. Immediate attention required (OR) " crlf)
+)
+
+(defrule final5
+(declare (salience -100))
+(result very severe)
+=>
+(printout t crlf "The person might have a very severe heart disease. Emergency !! Angioplastery suggested ." crlf)
+)
